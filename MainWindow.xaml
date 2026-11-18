@@ -5,11 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:demo"
         mc:Ignorable="d"
-        Title="Главное окно" Height="650" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Title="Главное окно" Height="750" Width="1100"
+        FontSize="18"
         FontFamily="Calibri"
         Background="#FFFFFF">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -23,10 +26,37 @@
             <Image Source="/Images/Чудо Обувь.png" Width="90"/>
             <TextBlock Text="Чудо Обувь" FontSize="24" VerticalAlignment="Center" Margin="10,0,0,0"/>
         </StackPanel>
-        
+
+        <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+            <TextBlock Text="{Binding User.Name}" FontSize="18" Margin="0,0,10,0" TextAlignment="Center" VerticalAlignment="Center"/>
+            <Button Name="LogoutBtn" Content="Выйти" Background="#70B2AF" Click="LogoutBtn_Click" FontSize="18" Height="40" Width="100" Margin="0,0,10,0"/>
+        </StackPanel>
+
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Список товаров" FontSize="20" Margin="20"/>
+
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <StackPanel Orientation="Vertical" Margin="15">
+                <TextBlock Text="Сортировка по цене" FontSize="18" Margin="0,0,0,10"/>
+                <ComboBox Name="SelectedSort" Padding="5" VerticalAlignment="Center" 
+                          SelectionChanged="SelectedSort_SelectionChanged">
+                    <ComboBoxItem Content="по убыванию" VerticalAlignment="Center"/>
+                    <ComboBoxItem Content="по возрастанию" VerticalAlignment="Center"/>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="15">
+                <TextBlock Text="Фильтрация по категории" FontSize="18" Margin="0,0,0,10"/>
+                <ComboBox Name="SelectedCategoryBox" Padding="5" VerticalAlignment="Center"
+                          SelectedItem="{Binding SelectedCategory}"
+                          ItemsSource="{Binding CategoryList}"
+                          SelectionChanged="SelectedCategoryBox_SelectionChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="15">
+                <TextBlock Text="Поиск по названию/описанию" FontSize="18" Margin="0,0,0,10"/>
+                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" TextChanged="SearchText_TextChanged" Height="30"/>
+            </StackPanel>
+        </StackPanel>
         
-        <ListBox ItemsSource="{Binding Products}" Grid.Row="3" Grid.Column="0" Margin="5" 
+        <ListBox ItemsSource="{Binding Products}" Grid.Row="3" Grid.ColumnSpan="2" Margin="5" 
                  HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -41,16 +71,21 @@
                         <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0,0,0"
                                     VerticalAlignment="Center">
 
-                            <TextBlock FontSize="16" HorizontalAlignment="Center">
+                            <TextBlock FontSize="20" HorizontalAlignment="Center" Padding="5">
                                 <Run Text="{Binding Productoin}"/>
                                 <Run Text=" | "/>
                                 <Run Text="{Binding Name}"/>
                             </TextBlock>
 
-                            <TextBlock Text="{Binding Category}" FontSize="12" Margin="0,5,0,0"/>
-                            <TextBlock Text="{Binding PairCount}" FontSize="12" Margin="0,5,0,0"/>
-                            <TextBlock Text="{Binding Composition}" FontSize="10" TextWrapping="Wrap" 
-                                       HorizontalAlignment="Left" MaxWidth="200" Margin="0,5,0,0"/>
+                            <TextBlock Text="{Binding Category}" FontSize="18" Margin="0,5,0,0"/>
+                            <TextBlock FontSize="18" Margin="0,5,0,0">
+                                <Run Text="{Binding PairCountText}"/>
+                                <Run Text=" ("/>
+                                <Run Text="{Binding PairCount}"/>
+                                <Run Text=") "/>
+                            </TextBlock>
+                            <TextBlock Text="{Binding Composition}" FontSize="16" TextWrapping="Wrap" 
+                                       HorizontalAlignment="Left" MaxWidth="400" Margin="0,5,0,0" Padding="0,0,0,5"/>
                         </StackPanel>
 
                         <TextBlock Grid.Row="1" Grid.Column="2" FontSize="18" Margin="0,5,5,0" 

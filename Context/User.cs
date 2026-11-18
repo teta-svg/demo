@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace demo.Context;
+﻿namespace demo.Context;
 
 public partial class User
 {

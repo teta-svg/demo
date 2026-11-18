@@ -148,4 +148,8 @@
     <Resource Include="Images\Чудо Обувь.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Doc\" />
+  </ItemGroup>
+
 </Project>

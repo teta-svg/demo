@@ -33,9 +33,13 @@ namespace demo
 
         public string? SelectedCategory { get; set; }
 
+        public string? SelectSort { get; set; }
+
         public string? SearchText { get; set; }
 
         public ObservableCollection<string> CategoryList { get; set; }
+
+        public ProductCard SelectedProduct { get; set; }
 
         private void LogoutBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -43,37 +47,6 @@ namespace demo
             Application.Current.MainWindow.Show();
 
             this.Close();
-        }
-
-        private void Swap(int indexA, int indexB)
-        {
-            var tmp = Products[indexA];
-            Products[indexA] = Products[indexB];
-            Products[indexB] = tmp;
-        }
-
-        private void SortList(bool isAscOrder)
-        {
-            for(int i=0; i<Products.Count-1; i++)
-            {
-                for(int j=0; j<Products.Count-1-i; j++)
-                {
-                    if (isAscOrder)
-                    {
-                        if (Products[j].Price > Products[j + 1].Price)
-                        {
-                            Swap(j, j+1);
-                        }
-                    }
-                    else
-                    {
-                        if (Products[j].Price < Products[j + 1].Price)
-                        {
-                            Swap(j, j + 1);
-                        }
-                    }
-                }
-            }
         }
 
         private void UpdateProductsList()
@@ -101,6 +74,18 @@ namespace demo
                 filteredProducts = _productService.GetProductList(SelectedCategory!);
             }
 
+            if (!string.IsNullOrEmpty(SelectSort))
+            {
+                if (SelectSort.Contains("по возрастанию"))
+                {
+                    filteredProducts = new ObservableCollection<ProductCard>(filteredProducts.OrderBy(p => p.Price));
+                }
+                else if (SelectSort.Contains("по убыванию"))
+                {
+                    filteredProducts = new ObservableCollection<ProductCard>(filteredProducts.OrderByDescending(p => p.Price));
+                }
+            }
+
             Products.Clear();
 
             if (filteredProducts.Count == 0)
@@ -112,18 +97,6 @@ namespace demo
             foreach (var product in filteredProducts)
             {
                 Products.Add(product);
-            }
-
-            if (SelectedSort != null)
-            {
-                if (SelectedSort.SelectedIndex == 0)
-                {
-                    SortList(isAscOrder: false);
-                }
-                else if (SelectedSort.SelectedIndex == 1)
-                {
-                    SortList(isAscOrder: true);
-                }
             }
         }
 
@@ -139,6 +112,22 @@ namespace demo
 
         private void SearchText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
+            UpdateProductsList();
+        }
+
+        private void ListBoxItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if(SelectedProduct == null)
+            {
+                MessageBox.Show("Не выбран товар", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            Application.Current.MainWindow = new ProductWindow(SelectedProduct.Id, User.Id);
+            Application.Current.MainWindow.ShowDialog();
+
+            _context.ChangeTracker.Clear();
+
             UpdateProductsList();
         }
     }

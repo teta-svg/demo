@@ -23,6 +23,7 @@ namespace demo
 
             UserContext logUser = new()
             {
+                Id = user.IdUser,
                 Name = $"{user.FirstName} {user.LastName[0]}. {user.MiddleName?[0]}.",
                 Role = user.IdRoleNavigation.RoleName
             };

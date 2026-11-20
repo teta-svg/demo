@@ -37,7 +37,7 @@
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal">
             <StackPanel Orientation="Vertical" Margin="15">
                 <TextBlock Text="Сортировка по цене" FontSize="18" Margin="0,0,0,10"/>
-                <ComboBox Name="SelectedSort" Padding="5" VerticalAlignment="Center" 
+                <ComboBox Name="SelectedSort" Padding="5" VerticalAlignment="Center" SelectedItem="{Binding SelectSort}"
                           SelectionChanged="SelectedSort_SelectionChanged">
                     <ComboBoxItem Content="по убыванию" VerticalAlignment="Center"/>
                     <ComboBoxItem Content="по возрастанию" VerticalAlignment="Center"/>
@@ -56,8 +56,13 @@
             </StackPanel>
         </StackPanel>
         
-        <ListBox ItemsSource="{Binding Products}" Grid.Row="3" Grid.ColumnSpan="2" Margin="5" 
+        <ListBox ItemsSource="{Binding Products}" Grid.Row="3" Grid.ColumnSpan="2" Margin="5" SelectedItem="{Binding SelectedProduct}"
                  HorizontalContentAlignment="Stretch">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Background="{Binding BackgroundColor}" Margin="0,5">
